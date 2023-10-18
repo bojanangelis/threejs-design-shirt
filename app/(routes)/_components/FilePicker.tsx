@@ -1,7 +1,7 @@
 import React from 'react'
 
 const FilePicker = () => {
-  return <div>FilePicker</div>
+  return <div>file</div>
 }
 
 export default FilePicker

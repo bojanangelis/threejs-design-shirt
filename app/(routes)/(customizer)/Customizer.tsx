@@ -3,13 +3,39 @@ import { EditorTabs, FilterTabs } from '@/config/constants'
 import { fadeAnimation, slideAnimation } from '@/config/motion'
 import state from '@/store'
 import { AnimatePresence, motion } from 'framer-motion'
-import React from 'react'
+import React, { useState } from 'react'
 import { useSnapshot } from 'valtio'
 import Tab from '../_components/Tab'
 import CustomButton from '@/components/CustomButton'
+import ColorPicker from '../_components/ColorPicker'
+import FilePicker from '../_components/FilePicker'
+import AIPicker from '../_components/AIPicker'
 
 const CustomizerComponent = () => {
   const snap = useSnapshot(state)
+  const [file, setFile] = useState('')
+  const [prompt, setPrompt] = useState('')
+  const [generatingImg, setGeneratingImg] = useState(false)
+  const [activeEditorTab, setActiveEditorTab] = useState('')
+  const [activeFilterTab, setActiveFilterTab] = useState({
+    logoShirt: true,
+    stylishShirt: false,
+  })
+  console.log('state-->', activeEditorTab)
+  //show tab content
+  const generateTabContent = () => {
+    switch (activeEditorTab) {
+      case 'colorpicker':
+        return <ColorPicker />
+      case 'filepicker':
+        return <FilePicker />
+      case 'aipicker':
+        return <AIPicker />
+      default:
+        return null
+    }
+  }
+
   return (
     <AnimatePresence>
       {!snap.intro && (
@@ -22,8 +48,15 @@ const CustomizerComponent = () => {
             <div className="flex items-center min-h-screen">
               <div className="editortabs-container tabs">
                 {EditorTabs.map(tab => (
-                  <Tab key={tab.name} tab={tab} handleClick={() => {}} />
+                  <Tab
+                    key={tab.name}
+                    tab={tab}
+                    handleClick={() => {
+                      setActiveEditorTab(tab.name)
+                    }}
+                  />
                 ))}
+                {generateTabContent()}
               </div>
             </div>
           </motion.div>
@@ -47,7 +80,7 @@ const CustomizerComponent = () => {
               <Tab
                 key={tab.name}
                 isFilterTab
-                isActiveTab=""
+                // isActiveTab
                 tab={tab}
                 handleClick={() => {}}
               />
